@@ -2,10 +2,9 @@ import { NgModule } from '@angular/core';
 
 //import { NgxEchartsModule } from 'ngx-echarts';
 //import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { ChartModule } from 'angular2-chartjs';
-import { HomeComponent } from './home.component';
 import { SharedModule } from '../shared/shared.module';
 import { HomeRoutingModule } from './home-routing.module';
+import { HomeComponent } from './home.component';
 
 /** orders - carts - transactions */
 /**
@@ -28,7 +27,6 @@ import { StatsBarAnimationChartComponent } from '../shared/wigets/e-commerce/pro
 import { StatsAreaChartComponent } from '../shared/wigets/e-commerce/profit-card/back-side/stats-area-chart.component';
  **/
 
-
 /** traffic list */
 
 /**
@@ -43,12 +41,12 @@ import { TrafficBarChartComponent } from '../shared/wigets/e-commerce/traffic-re
 import {
   NbButtonModule,
   NbCardModule,
+  NbIconModule,
+  NbListModule,
   NbProgressBarModule,
+  NbSelectModule,
   NbTabsetModule,
   NbUserModule,
-  NbIconModule,
-  NbSelectModule,
-  NbListModule,
 } from '@nebular/theme';
 
 @NgModule({
@@ -73,11 +71,9 @@ import {
     ChartPanelHeaderComponent,
     ChartPanelSummaryComponent
      **/
-
   ],
   imports: [
     SharedModule,
-    ChartModule,
     //NgxEchartsModule,
     //NgxChartsModule,
     HomeRoutingModule,
@@ -91,4 +87,4 @@ import {
     NbListModule,
   ],
 })
-export class HomeModule { }
+export class HomeModule {}

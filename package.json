@@ -41,7 +41,6 @@
     "@ngx-translate/http-loader": "^6.0.0",
     "@swimlane/ngx-charts": "^16.0.0",
     "angular-tree-component": "^8.5.6",
-    "angular2-chartjs": "0.4.1",
     "angular2-query-builder": "^0.6.2",
     "bootstrap": "4.3.1",
     "chart.js": "^2.9.3",
