@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { NbDialogModule } from '@nebular/theme';
-import { QueryBuilderModule } from 'angular2-query-builder';
 import { FileManagerModule } from 'ng6-file-man';
+import { NgxAngularQueryBuilderModule } from 'ngx-angular-query-builder';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { LightboxModule } from 'ngx-lightbox';
 import { MalihuScrollbarModule } from 'ngx-malihu-scrollbar';
@@ -18,7 +18,7 @@ import {
     ContentRoutingModule,
     SharedModule,
     FileManagerModule,
-    QueryBuilderModule,
+    NgxAngularQueryBuilderModule,
     NbDialogModule.forChild(),
     NgxSummernoteModule,
     NgxDropzoneModule,
