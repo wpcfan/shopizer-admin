@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { OptionService } from '../services/option.service';
-import { LocalDataSource } from 'ng2-smart-table';
-import { TranslateService } from '@ngx-translate/core';
-import { ShowcaseDialogComponent } from '../../../shared/components/showcase-dialog/showcase-dialog.component';
 import { NbDialogService } from '@nebular/theme';
+import { TranslateService } from '@ngx-translate/core';
+import { LocalDataSource } from 'angular2-smart-table';
 import { ToastrService } from 'ngx-toastr';
+import { ShowcaseDialogComponent } from '../../../shared/components/showcase-dialog/showcase-dialog.component';
+import { OptionService } from '../services/option.service';
 @Component({
   selector: 'ngx-options-set-list',
   templateUrl: './options-set-list.component.html',
@@ -22,17 +22,14 @@ export class OptionsSetListComponent implements OnInit {
     private translate: TranslateService,
     private router: Router,
     private dialogService: NbDialogService,
-    private toastr: ToastrService,
-
-  ) {
-  }
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
     this.getList();
   }
 
   getList() {
-
     this.loadingList = true;
     this.optionService.getListOfOptionsSet().subscribe((res) => {
       this.source.load(res);
@@ -67,7 +64,6 @@ export class OptionsSetListComponent implements OnInit {
           title: this.translate.instant('COMMON.ID'),
           type: 'number',
           filter: false,
-
         },
         code: {
           title: this.translate.instant('COMMON.CODE'),
@@ -85,8 +81,8 @@ export class OptionsSetListComponent implements OnInit {
           type: 'string',
           filter: false,
           valuePrepareFunction: (data) => {
-            if(data != null) {
-              const value = data.map(a => a.name).join(', ');
+            if (data != null) {
+              const value = data.map((a) => a.name).join(', ');
               return value;
             }
           },
@@ -96,8 +92,8 @@ export class OptionsSetListComponent implements OnInit {
           type: 'string',
           filter: false,
           valuePrepareFunction: (data) => {
-            if(data != null) {
-              const value = data.map(a => a.name).join(', ');
+            if (data != null) {
+              const value = data.map((a) => a.name).join(', ');
               return value;
             }
           },
@@ -108,13 +104,17 @@ export class OptionsSetListComponent implements OnInit {
 
   deleteRecord(event) {
     //console.log(event);
-    this.dialogService.open(ShowcaseDialogComponent, {})
-      .onClose.subscribe(res => {
+    this.dialogService
+      .open(ShowcaseDialogComponent, {})
+      .onClose.subscribe((res) => {
         if (res) {
           // event.confirm.resolve();
-          this.optionService.deleteOptionSet(event.data.id)
-            .subscribe(result => {
-              this.toastr.success(this.translate.instant('OPTION.SET_OPTION_REMOVED'));
+          this.optionService
+            .deleteOptionSet(event.data.id)
+            .subscribe((result) => {
+              this.toastr.success(
+                this.translate.instant('OPTION.SET_OPTION_REMOVED')
+              );
               this.getList();
             });
         } else {
@@ -123,7 +123,6 @@ export class OptionsSetListComponent implements OnInit {
         }
       });
   }
-
 
   onClickAction(event) {
     switch (event.action) {
@@ -136,6 +135,8 @@ export class OptionsSetListComponent implements OnInit {
     }
   }
   onEdit(event) {
-    this.router.navigate(['/pages/catalogue/options/option-set/' + event.data.id]);
+    this.router.navigate([
+      '/pages/catalogue/options/option-set/' + event.data.id,
+    ]);
   }
 }

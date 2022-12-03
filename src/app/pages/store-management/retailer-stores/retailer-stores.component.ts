@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { StoreService } from '../services/store.service';
-import { LocalDataSource } from 'ng2-smart-table';
 import { TranslateService } from '@ngx-translate/core';
+import { LocalDataSource } from 'angular2-smart-table';
+import { StoreService } from '../services/store.service';
 
 @Component({
   selector: 'ngx-retailer-stores',
@@ -31,9 +31,8 @@ export class RetailerStoresComponent implements OnInit {
   constructor(
     private storeService: StoreService,
     private router: Router,
-    private translate: TranslateService,
-  ) {
-  }
+    private translate: TranslateService
+  ) {}
 
   ngOnInit() {
     this.getList();
@@ -45,7 +44,7 @@ export class RetailerStoresComponent implements OnInit {
     this.loadingList = true;
 
     //this.storeService.getListOfMerchantStores({count: 10000}).subscribe(res => {
-    this.storeService.getListOfMerchantStoreNames('').subscribe(res => {
+    this.storeService.getListOfMerchantStoreNames('').subscribe((res) => {
       this.totalCount = res.totalPages;
       this.source.load(res.data);
       this.loadingList = false;
@@ -113,5 +112,4 @@ export class RetailerStoresComponent implements OnInit {
     }
     this.getList();
   }
-
 }

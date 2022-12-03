@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalDataSource } from 'ng2-smart-table';
 import { Router } from '@angular/router';
-import { StorageService } from '../../shared/services/storage.service';
-import { CustomersService } from '../services/customer.service';
-import { StoreService } from '../../store-management/services/store.service';
 import { TranslateService } from '@ngx-translate/core';
+import { LocalDataSource } from 'angular2-smart-table';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from '../../shared/services/error.service';
+import { StorageService } from '../../shared/services/storage.service';
+import { StoreService } from '../../store-management/services/store.service';
+import { CustomersService } from '../services/customer.service';
 
 @Component({
   selector: 'ngx-list',
@@ -32,7 +32,7 @@ export class ListComponent implements OnInit {
     private storageService: StorageService,
     private storeService: StoreService,
     private translate: TranslateService,
-    private errorService: ErrorService,
+    private errorService: ErrorService
   ) {
     this.getStoreList();
     this.selectedStore = this.storageService.getMerchant();
@@ -46,15 +46,15 @@ export class ListComponent implements OnInit {
     this.getCustomers();
   }
   getStoreList() {
-    this.storeService.getListOfMerchantStoreNames({ store: '' })
-      .subscribe(res => {
+    this.storeService
+      .getListOfMerchantStoreNames({ store: '' })
+      .subscribe((res) => {
         res.forEach((store) => {
           this.stores.push({ value: store.code, label: store.code });
         });
       });
   }
   loadParams() {
-
     return {
       store: this.storageService.getMerchant(),
       lang: this.storageService.getLanguage(),
@@ -66,19 +66,20 @@ export class ListComponent implements OnInit {
     this.params.page = this.currentPage;
 
     this.loadingList = true;
-    this.customersService.getCustomers(this.params)
-      .subscribe(customer => {
+    this.customersService.getCustomers(this.params).subscribe(
+      (customer) => {
         this.loadingList = false;
         this.source.load(customer.customers);
         this.totalCount = customer.totalPages;
-      }, error => {
+      },
+      (error) => {
         this.errorService.error('ERROR.SYSTEM_ERROR', error);
-      });
+      }
+    );
     this.setSettings();
   }
   setSettings() {
     this.settings = {
-
       actions: {
         columnTitle: this.translate.instant('ORDER.ACTIONS'),
         add: false,
@@ -152,7 +153,6 @@ export class ListComponent implements OnInit {
     this.getCustomers();
   }
   onSearch(query: string = '') {
-
     if (query.length == 0) {
       this.searchValue = null;
       return;
@@ -161,7 +161,6 @@ export class ListComponent implements OnInit {
     this.params['name'] = query;
     this.getCustomers();
     this.searchValue = query;
-
   }
   resetSearch() {
     this.searchValue = null;
@@ -185,7 +184,6 @@ export class ListComponent implements OnInit {
       case 'delete':
         this.onDelete(event);
         break;
-
     }
   }
 
@@ -194,19 +192,21 @@ export class ListComponent implements OnInit {
     this.router.navigate(['/pages/customer/add']);
   }
 
-
-
   onDelete(event) {
     console.log('DELETE');
     localStorage.setItem('customerid', null);
     //TODO dialog
 
-    this.customersService.deleteCustomer(event.data.id,localStorage.getItem('merchant'))
-    .subscribe(data => {
-      this.loadingList = false;
-    }, error => {
-      this.errorService.error('ERROR.SYSTEM_ERROR', error);
-    });
+    this.customersService
+      .deleteCustomer(event.data.id, localStorage.getItem('merchant'))
+      .subscribe(
+        (data) => {
+          this.loadingList = false;
+        },
+        (error) => {
+          this.errorService.error('ERROR.SYSTEM_ERROR', error);
+        }
+      );
     this.errorService.success('COMMON.SUCCESS_REMOVE');
     this.router.navigate(['/pages/customer/list']);
   }

@@ -1,13 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { LocalDataSource } from 'angular2-smart-table';
 import { StorageService } from '../../shared/services/storage.service';
 import { StoreService } from '../../store-management/services/store.service';
 import { OrdersService } from '../services/orders.service';
-import { LocalDataSource } from 'ng2-smart-table';
-import { Router } from '@angular/router';
 // import { MalihuScrollbarService } from 'ngx-malihu-scrollbar';
 import { TranslateService } from '@ngx-translate/core';
-import { error } from '@angular/compiler/src/util';
 @Component({
   selector: 'ngx-order-list',
   templateUrl: './order-list.component.html',
@@ -37,16 +35,16 @@ export class OrderListComponent implements OnInit {
     // private mScrollbarService: MalihuScrollbarService,
     private translate: TranslateService,
     private storageService: StorageService,
-    private storeService: StoreService,
+    private storeService: StoreService
   ) {
     this.isSuperAdmin = this.storageService.getUserRoles().isSuperadmin;
     this.getStoreList();
     this.selectedStore = this.storageService.getMerchant();
   }
   getStoreList() {
-    this.storeService.getListOfMerchantStoreNames({ store: '' })
-      .subscribe(res => {
-
+    this.storeService
+      .getListOfMerchantStoreNames({ store: '' })
+      .subscribe((res) => {
         res.forEach((store) => {
           this.stores.push({ value: store.code, label: store.code });
         });
@@ -87,7 +85,6 @@ export class OrderListComponent implements OnInit {
           this.getOrderList();
         }
       }, time);
-
     });
   }
   loadParams() {
@@ -102,8 +99,8 @@ export class OrderListComponent implements OnInit {
     this.params.page = this.currentPage;
 
     this.loadingList = true;
-    this.ordersService.getOrders(this.params)
-      .subscribe(orders => {
+    this.ordersService.getOrders(this.params).subscribe(
+      (orders) => {
         this.loadingList = false;
         if (orders.orders && orders.orders.length !== 0) {
           this.source.load(orders.orders);
@@ -111,10 +108,12 @@ export class OrderListComponent implements OnInit {
           this.source.load([]);
         }
         this.totalCount = orders.recordsTotal;
-      }, error => {
+      },
+      (error) => {
         this.loadingList = false;
         this.source.load([]);
-      });
+      }
+    );
     this.setSettings();
   }
 
@@ -152,8 +151,7 @@ export class OrderListComponent implements OnInit {
           type: 'string',
           valuePrepareFunction: (customer, data) =>
             // console.log(data);
-             data.billing.firstName + ' ' + data.billing.lastName
-          ,
+            data.billing.firstName + ' ' + data.billing.lastName,
           filterFunction(cell: any, search?: string): boolean {
             return true;
           },
@@ -163,8 +161,7 @@ export class OrderListComponent implements OnInit {
           type: 'string',
           valuePrepareFunction: (customer, data) =>
             // console.log(customer)
-             data.billing.phone
-          ,
+            data.billing.phone,
           filterFunction(cell: any, search?: string): boolean {
             return true;
           },
@@ -174,8 +171,7 @@ export class OrderListComponent implements OnInit {
           type: 'string',
           valuePrepareFunction: (customer, data) =>
             // console.log(customer)
-             data.billing.email
-          ,
+            data.billing.email,
           filterFunction(cell: any, search?: string): boolean {
             return true;
           },
@@ -207,19 +203,32 @@ export class OrderListComponent implements OnInit {
             config: {
               selectText: this.translate.instant('ORDER.SHOWALL'),
               list: [
-                { value: 'ORDERED', title: this.translate.instant('ORDER.ORDERED') },
-                { value: 'PROCESSED', title: this.translate.instant('ORDER.PROCESSED') },
-                { value: 'DELIVERED', title: this.translate.instant('ORDER.DELIVERED') },
-                { value: 'REFUNDED', title: this.translate.instant('ORDER.REFUNDED') },
-                { value: 'CANCELED', title: this.translate.instant('ORDER.CANCELED') },
+                {
+                  value: 'ORDERED',
+                  title: this.translate.instant('ORDER.ORDERED'),
+                },
+                {
+                  value: 'PROCESSED',
+                  title: this.translate.instant('ORDER.PROCESSED'),
+                },
+                {
+                  value: 'DELIVERED',
+                  title: this.translate.instant('ORDER.DELIVERED'),
+                },
+                {
+                  value: 'REFUNDED',
+                  title: this.translate.instant('ORDER.REFUNDED'),
+                },
+                {
+                  value: 'CANCELED',
+                  title: this.translate.instant('ORDER.CANCELED'),
+                },
               ],
             },
           },
         },
       },
-
     };
-
   }
   // paginator
   changePage(event) {
@@ -257,5 +266,4 @@ export class OrderListComponent implements OnInit {
     localStorage.setItem('orderID', e.data.id);
     this.router.navigate(['pages/orders/order-details']);
   }
-
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { LocalDataSource } from 'ng2-smart-table';
-import { StoreService } from '../services/store.service';
 import { TranslateService } from '@ngx-translate/core';
+import { LocalDataSource } from 'angular2-smart-table';
+import { StoreService } from '../services/store.service';
 
 @Component({
   selector: 'ngx-retailer-list',
@@ -32,8 +32,8 @@ export class RetailerListComponent implements OnInit {
   constructor(
     private storeService: StoreService,
     private router: Router,
-    private translate: TranslateService,
-  ) { }
+    private translate: TranslateService
+  ) {}
 
   ngOnInit() {
     this.getList();
@@ -42,12 +42,11 @@ export class RetailerListComponent implements OnInit {
   getList() {
     this.params.page = this.currentPage - 1;
     this.loadingList = true;
-    this.storeService.getListOfStores(this.params)
-      .subscribe(res => {
-        this.totalCount = res.recordsTotal;
-        this.source.load(res.data);
-        this.loadingList = false;
-      });
+    this.storeService.getListOfStores(this.params).subscribe((res) => {
+      this.totalCount = res.recordsTotal;
+      this.source.load(res.data);
+      this.loadingList = false;
+    });
     this.setSettings();
     this.translate.onLangChange.subscribe((event) => {
       this.setSettings();
@@ -110,6 +109,4 @@ export class RetailerListComponent implements OnInit {
     }
     this.getList();
   }
-
-
 }

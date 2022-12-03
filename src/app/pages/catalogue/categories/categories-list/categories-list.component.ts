@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
-import { CategoryService } from '../services/category.service';
-import { LocalDataSource } from 'ng2-smart-table';
-import { ButtonRenderComponent } from './button-render.component';
 import { NbDialogService } from '@nebular/theme';
-import { ShowcaseDialogComponent } from '../../../shared/components/showcase-dialog/showcase-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
-import { ProductService } from '../../products/services/product.service';
-import { StorageService } from '../../../shared/services/storage.service';
+import { LocalDataSource } from 'angular2-smart-table';
 import { ToastrService } from 'ngx-toastr';
+import { ShowcaseDialogComponent } from '../../../shared/components/showcase-dialog/showcase-dialog.component';
 import { ListingService } from '../../../shared/services/listing.service';
+import { StorageService } from '../../../shared/services/storage.service';
+import { ProductService } from '../../products/services/product.service';
+import { CategoryService } from '../services/category.service';
+import { ButtonRenderComponent } from './button-render.component';
 
 @Component({
   selector: 'ngx-categories-list',
@@ -44,8 +44,7 @@ export class CategoriesListComponent implements OnInit {
     private translate: TranslateService,
     private toastr: ToastrService,
     private productService: ProductService,
-    private storageService: StorageService,
-
+    private storageService: StorageService
   ) {
     this.roles = JSON.parse(localStorage.getItem('roles'));
     this.listingService = new ListingService();
@@ -60,20 +59,19 @@ export class CategoriesListComponent implements OnInit {
     };
   }
 
-    /** callback methods for table list*/
-    private loadList(newParams: any) {
-      this.currentPage = 1; //back to page 1
-      this.params = newParams;
-      this.fetchTableData();
-    }
+  /** callback methods for table list*/
+  private loadList(newParams: any) {
+    this.currentPage = 1; //back to page 1
+    this.params = newParams;
+    this.fetchTableData();
+  }
 
-    private resetList() {
-      this.currentPage = 1;//back to page 1
-      this.params = this.loadParams();
-      this.getList();
-    }
-    /** */
-
+  private resetList() {
+    this.currentPage = 1; //back to page 1
+    this.params = this.loadParams();
+    this.getList();
+  }
+  /** */
 
   ngOnInit() {
     this.getList();
@@ -82,13 +80,18 @@ export class CategoriesListComponent implements OnInit {
       this.getList();
     });
 
-    //ng2-smart-table server side filter
+    //angular2-smart-table server side filter
     this.source.onChanged().subscribe((change) => {
-      if (!this.loadingList) {//listing service
-        this.listingService.filterDetect(this.params, change, this.loadList.bind(this), this.resetList.bind(this));
+      if (!this.loadingList) {
+        //listing service
+        this.listingService.filterDetect(
+          this.params,
+          change,
+          this.loadList.bind(this),
+          this.resetList.bind(this)
+        );
       }
     });
-
   }
 
   // creating array of categories include children
@@ -112,16 +115,16 @@ export class CategoriesListComponent implements OnInit {
     this.setSettings();
   }
 
-  fetchTableData(){
+  fetchTableData() {
     this.loadingList = true;
-    const page = this.currentPage -1;
+    const page = this.currentPage - 1;
     this.params.page = page;
-    this.categoryService.getListOfCategories(this.params)
-      .subscribe(categories => {
+    this.categoryService
+      .getListOfCategories(this.params)
+      .subscribe((categories) => {
         categories.categories.forEach((el) => {
           el.name = el.description.name;
           this.getChildren(el);
-
         });
         this.totalCount = categories.recordsTotal;
         this.source.load(this.categories);
@@ -140,7 +143,12 @@ export class CategoriesListComponent implements OnInit {
         sort: true,
         custom: [
           { name: 'details', title: '<i class="nb-edit"></i>' },
-          { name: 'remove', title: this._sanitizer.bypassSecurityTrustHtml('<i class="nb-trash"></i>') },
+          {
+            name: 'remove',
+            title: this._sanitizer.bypassSecurityTrustHtml(
+              '<i class="nb-trash"></i>'
+            ),
+          },
         ],
       },
       pager: {
@@ -171,7 +179,7 @@ export class CategoriesListComponent implements OnInit {
           title: this.translate.instant('CATEGORY.PARENT'),
           type: 'string',
           filter: false,
-          valuePrepareFunction: (parent) => parent ? parent.code : 'root',
+          valuePrepareFunction: (parent) => (parent ? parent.code : 'root'),
         },
         visible: {
           filter: false,
@@ -187,15 +195,22 @@ export class CategoriesListComponent implements OnInit {
   route(event) {
     switch (event.action) {
       case 'details':
-        this.router.navigate(['pages/catalogue/categories/category/', event.data.id]);
+        this.router.navigate([
+          'pages/catalogue/categories/category/',
+          event.data.id,
+        ]);
         break;
       case 'remove':
-        this.dialogService.open(ShowcaseDialogComponent, {})
-          .onClose.subscribe(res => {
+        this.dialogService
+          .open(ShowcaseDialogComponent, {})
+          .onClose.subscribe((res) => {
             if (res) {
-              this.categoryService.deleteCategory(event.data.id)
-                .subscribe(data => {
-                  this.toastr.success(this.translate.instant('CATEGORY_FORM.CATEGORY_REMOVED'));
+              this.categoryService
+                .deleteCategory(event.data.id)
+                .subscribe((data) => {
+                  this.toastr.success(
+                    this.translate.instant('CATEGORY_FORM.CATEGORY_REMOVED')
+                  );
                   this.getList();
                 });
             }
@@ -241,7 +256,6 @@ export class CategoriesListComponent implements OnInit {
   }
 
   onSearch(query: string = '') {
-
     if (query.length == 0) {
       this.searchValue = null;
       return;
@@ -250,7 +264,5 @@ export class CategoriesListComponent implements OnInit {
     this.params['name'] = query;
     this.getList();
     this.searchValue = query;
-
   }
-
 }

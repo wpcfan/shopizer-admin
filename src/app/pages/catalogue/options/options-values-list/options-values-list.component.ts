@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { LocalDataSource } from 'ng2-smart-table';
-import { TranslateService } from '@ngx-translate/core';
-import { OptionValuesService } from '../services/option-values.service';
-import { ShowcaseDialogComponent } from '../../../shared/components/showcase-dialog/showcase-dialog.component';
 import { NbDialogService } from '@nebular/theme';
+import { TranslateService } from '@ngx-translate/core';
+import { LocalDataSource } from 'angular2-smart-table';
 import { ToastrService } from 'ngx-toastr';
+import { ShowcaseDialogComponent } from '../../../shared/components/showcase-dialog/showcase-dialog.component';
 import { StorageService } from '../../../shared/services/storage.service';
 import { StoreService } from '../../../store-management/services/store.service';
+import { OptionValuesService } from '../services/option-values.service';
 @Component({
   selector: 'ngx-options-values-list',
   templateUrl: './options-values-list.component.html',
@@ -36,7 +36,7 @@ export class OptionsValuesListComponent implements OnInit {
     private dialogService: NbDialogService,
     private toastr: ToastrService,
     private storageService: StorageService,
-    private storeService: StoreService,
+    private storeService: StoreService
   ) {
     this.getStoreList();
   }
@@ -52,23 +52,24 @@ export class OptionsValuesListComponent implements OnInit {
     this.getList();
   }
   getStoreList() {
-    this.storeService.getListOfMerchantStoreNames({ store: '' })
-      .subscribe(res => {
+    this.storeService
+      .getListOfMerchantStoreNames({ store: '' })
+      .subscribe((res) => {
         res.forEach((store) => {
           this.stores.push({ value: store.code, label: store.code });
         });
       });
   }
   getList() {
-
     this.loadingList = true;
     this.params.page = this.currentPage - 1;
-    this.optionValuesService.getListOfOptionValues(this.params)
-      .subscribe(res => {
+    this.optionValuesService
+      .getListOfOptionValues(this.params)
+      .subscribe((res) => {
         this.totalCount = res.recordsTotal;
         this.optionValues = [...res.optionValues];
-        this.optionValues.forEach(element => {
-          element.descriptions.forEach(description => {
+        this.optionValues.forEach((element) => {
+          element.descriptions.forEach((description) => {
             description.parent_id = element.id;
           });
         });
@@ -118,14 +119,15 @@ export class OptionsValuesListComponent implements OnInit {
             // parent_id for link
             let parent_id = -1;
             // find element with certain language
-            const description = descriptions.find(el => {
+            const description = descriptions.find((el) => {
               // set parent_id
               if (parent_id === -1 && el) {
                 parent_id = el.parent_id;
               }
               return el.language === this.storageService.getLanguage();
             });
-            const name = description && description.name ? description.name : '';
+            const name =
+              description && description.name ? description.name : '';
             return name;
           },
         },
@@ -134,13 +136,17 @@ export class OptionsValuesListComponent implements OnInit {
   }
 
   deleteRecord(event) {
-    this.dialogService.open(ShowcaseDialogComponent, {})
-      .onClose.subscribe(res => {
+    this.dialogService
+      .open(ShowcaseDialogComponent, {})
+      .onClose.subscribe((res) => {
         if (res) {
           // event.confirm.resolve();
-          this.optionValuesService.deleteOptionValue(event.data.id)
-            .subscribe(result => {
-              this.toastr.success(this.translate.instant('OPTION_VALUE.OPTION_VALUE_REMOVED'));
+          this.optionValuesService
+            .deleteOptionValue(event.data.id)
+            .subscribe((result) => {
+              this.toastr.success(
+                this.translate.instant('OPTION_VALUE.OPTION_VALUE_REMOVED')
+              );
               this.getList();
             });
         } else {
@@ -200,7 +206,8 @@ export class OptionsValuesListComponent implements OnInit {
     }
   }
   onEdit(event) {
-    this.router.navigate(['/pages/catalogue/options/option-value/' + event.data.id]);
+    this.router.navigate([
+      '/pages/catalogue/options/option-value/' + event.data.id,
+    ]);
   }
 }
-

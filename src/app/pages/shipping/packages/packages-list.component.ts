@@ -1,13 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { Component, OnInit, ViewChild } from '@angular/core';
 // import { StorageService } from '../../shared/services/storage.service';
 // import { StoreService } from '../../store-management/services/store.service';
-import { LocalDataSource } from 'ng2-smart-table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { SharedService } from '../services/shared.service';
-import { error } from '@angular/compiler/src/util';
+import { LocalDataSource } from 'angular2-smart-table';
 import { ToastrService } from 'ngx-toastr';
+import { SharedService } from '../services/shared.service';
 @Component({
   selector: 'ngx-packages-list',
   templateUrl: './packages-list.component.html',
@@ -30,7 +28,7 @@ export class PackagesListComponent implements OnInit {
     private router: Router,
     private translate: TranslateService,
     private sharedService: SharedService,
-    private toastr: ToastrService,
+    private toastr: ToastrService
   ) {
     this.getPackagesList();
   }
@@ -43,20 +41,19 @@ export class PackagesListComponent implements OnInit {
 
   getPackagesList() {
     this.loadingList = true;
-    this.sharedService.getPackaging()
-      .subscribe(data => {
+    this.sharedService.getPackaging().subscribe(
+      (data) => {
         this.loadingList = false;
         this.source.load(data);
-      }, error => {
-
-      });
+      },
+      (error) => {}
+    );
     this.setSettings();
   }
 
   setSettings() {
     const me = this;
     this.settings = {
-
       hideSubHeader: true,
       actions: {
         columnTitle: this.translate.instant('ORDER.ACTIONS'),
@@ -111,9 +108,7 @@ export class PackagesListComponent implements OnInit {
           filter: false,
         },
       },
-
     };
-
   }
   // paginator
   changePage(event) {
@@ -139,24 +134,25 @@ export class PackagesListComponent implements OnInit {
         break;
       }
     }
-
   }
   delete(e) {
     this.loadingList = true;
-    this.sharedService.deletePackaging(e.data.code)
-      .subscribe(res => {
+    this.sharedService.deletePackaging(e.data.code).subscribe(
+      (res) => {
         this.loadingList = false;
         this.toastr.success('Packages has been deleted successfully');
         this.getPackagesList();
-      }, error => {
+      },
+      (error) => {
         this.loadingList = false;
-
-      });
+      }
+    );
   }
   route(e) {
     if (e.action == 'delete') {
       this.delete(e);
-    } if (e.action == 'edit') {
+    }
+    if (e.action == 'edit') {
       localStorage.setItem('packagesID', e.data.code);
       this.router.navigate(['pages/shipping/packaging/add']);
     }

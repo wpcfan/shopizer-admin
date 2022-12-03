@@ -1,17 +1,16 @@
-import { Component, OnInit, SystemJsNgModuleLoader } from '@angular/core';
-import { ProductService } from '../services/product.service';
-import { LocalDataSource } from 'ng2-smart-table';
-import { AvailableButtonComponent } from './available-button.component';
-import { ShowcaseDialogComponent } from '../../../shared/components/showcase-dialog/showcase-dialog.component';
-import { NbDialogService } from '@nebular/theme';
-import { StoreService } from '../../../store-management/services/store.service';
-import { UserService } from '../../../shared/services/user.service';
-import { TranslateService } from '@ngx-translate/core';
-import { StorageService } from '../../../shared/services/storage.service';
-import { ToastrService } from 'ngx-toastr';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NbDialogService } from '@nebular/theme';
+import { TranslateService } from '@ngx-translate/core';
+import { LocalDataSource } from 'angular2-smart-table';
+import { ToastrService } from 'ngx-toastr';
+import { ShowcaseDialogComponent } from '../../../shared/components/showcase-dialog/showcase-dialog.component';
 import { ListingService } from '../../../shared/services/listing.service';
-
+import { StorageService } from '../../../shared/services/storage.service';
+import { UserService } from '../../../shared/services/user.service';
+import { StoreService } from '../../../store-management/services/store.service';
+import { ProductService } from '../services/product.service';
+import { AvailableButtonComponent } from './available-button.component';
 
 @Component({
   selector: 'ngx-products-list',
@@ -45,7 +44,7 @@ export class ProductsListComponent implements OnInit {
     private translate: TranslateService,
     private storageService: StorageService,
     private toastr: ToastrService,
-    private router: Router,
+    private router: Router
   ) {
     this.selectedStore = this.storageService.getMerchant();
     this.isSuperadmin = this.storageService.getUserRoles().isSuperadmin;
@@ -70,31 +69,34 @@ export class ProductsListComponent implements OnInit {
       this.getList();
     });
 
-
-    //ng2-smart-table server side filter //list in field
+    //angular2-smart-table server side filter //list in field
     this.source.onChanged().subscribe((change) => {
-      if (!this.loadingList) {//listing service
+      if (!this.loadingList) {
+        //listing service
         //callback from filter
-        this.listingService.filterDetect(this.params, change, this.loadList.bind(this), this.resetList.bind(this));
+        this.listingService.filterDetect(
+          this.params,
+          change,
+          this.loadList.bind(this),
+          this.resetList.bind(this)
+        );
       }
     });
   }
 
-  fetchTableData(){
+  fetchTableData() {
     this.loadingList = true;
-    this.productService.getListOfProducts(this.params)
-      .subscribe(res => {
-        const products = res.products;
-        this.totalCount = res.recordsTotal;
-        products.forEach(el => {
-          el.name = el.description.name;
-        });
-        this.products = [...products];
-        this.source.load(products);
-        this.loadingList = false;
+    this.productService.getListOfProducts(this.params).subscribe((res) => {
+      const products = res.products;
+      this.totalCount = res.recordsTotal;
+      products.forEach((el) => {
+        el.name = el.description.name;
       });
-
- }
+      this.products = [...products];
+      this.source.load(products);
+      this.loadingList = false;
+    });
+  }
 
   /** callback methods for table list*/
   private loadList(newParams: any) {
@@ -105,21 +107,20 @@ export class ProductsListComponent implements OnInit {
   }
 
   private resetList() {
-    this.currentPage = 1;//back to page 1
+    this.currentPage = 1; //back to page 1
     this.params = this.loadParams();
     this.getList();
   }
   /** */
 
   getStore() {
-    this.storeService.getListOfStores({ code: 'DEFAULT' })
-      .subscribe(res => {
-        const storeData = [];
-        res.data.forEach((store) => {
-          storeData.push(store.code);
-        });
-        this.stores = storeData;
+    this.storeService.getListOfStores({ code: 'DEFAULT' }).subscribe((res) => {
+      const storeData = [];
+      res.data.forEach((store) => {
+        storeData.push(store.code);
       });
+      this.stores = storeData;
+    });
   }
 
   getList() {
@@ -205,33 +206,43 @@ export class ProductsListComponent implements OnInit {
       quantity: event.newData.quantity,
     };
     event.confirm.resolve(event.newData);
-    this.productService.updateProductFromTable(event.newData.id, product)
-      .subscribe(res => {
-        event.confirm.resolve(event.newData);
-        this.toastr.success(this.translate.instant('PRODUCT.PRODUCT_UPDATED'));
-      }, error => {
-        console.log(error.error.message);
-      });
+    this.productService
+      .updateProductFromTable(event.newData.id, product)
+      .subscribe(
+        (res) => {
+          event.confirm.resolve(event.newData);
+          this.toastr.success(
+            this.translate.instant('PRODUCT.PRODUCT_UPDATED')
+          );
+        },
+        (error) => {
+          console.log(error.error.message);
+        }
+      );
   }
 
   deleteRecord(event) {
-    this.dialogService.open(ShowcaseDialogComponent, {})
-      .onClose.subscribe(res => {
+    this.dialogService
+      .open(ShowcaseDialogComponent, {})
+      .onClose.subscribe((res) => {
         if (res) {
-          this.productService.deleteProduct(event.data.id)
-            .subscribe(result => {
-              this.toastr.success(this.translate.instant('PRODUCT.PRODUCT_REMOVED'));
+          this.productService
+            .deleteProduct(event.data.id)
+            .subscribe((result) => {
+              this.toastr.success(
+                this.translate.instant('PRODUCT.PRODUCT_REMOVED')
+              );
               this.getList();
               // event.confirm.resolve();
             });
-        } else {}
+        } else {
+        }
       });
   }
 
   choseStore(event) {
     this.params.store = event;
     this.getList();
-
   }
 
   // paginator

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { OptionService } from '../services/option.service';
-import { LocalDataSource } from 'ng2-smart-table';
-import { TranslateService } from '@ngx-translate/core';
-import { ShowcaseDialogComponent } from '../../../shared/components/showcase-dialog/showcase-dialog.component';
 import { NbDialogService } from '@nebular/theme';
+import { TranslateService } from '@ngx-translate/core';
+import { LocalDataSource } from 'angular2-smart-table';
 import { ToastrService } from 'ngx-toastr';
+import { ShowcaseDialogComponent } from '../../../shared/components/showcase-dialog/showcase-dialog.component';
 import { StorageService } from '../../../shared/services/storage.service';
 import { StoreService } from '../../../store-management/services/store.service';
+import { OptionService } from '../services/option.service';
 
 @Component({
   selector: 'ngx-options-list',
@@ -36,7 +36,7 @@ export class OptionsListComponent implements OnInit {
     private dialogService: NbDialogService,
     private toastr: ToastrService,
     private storageService: StorageService,
-    private storeService: StoreService,
+    private storeService: StoreService
   ) {
     this.getStoreList();
   }
@@ -53,8 +53,9 @@ export class OptionsListComponent implements OnInit {
     };
   }
   getStoreList() {
-    this.storeService.getListOfMerchantStoreNames({ store: '' })
-      .subscribe(res => {
+    this.storeService
+      .getListOfMerchantStoreNames({ store: '' })
+      .subscribe((res) => {
         res.forEach((store) => {
           this.stores.push({ value: store.code, label: store.code });
         });
@@ -98,7 +99,6 @@ export class OptionsListComponent implements OnInit {
           title: this.translate.instant('COMMON.ID'),
           type: 'number',
           filter: false,
-
         },
         descriptions: {
           title: this.translate.instant('COMMON.NAME'),
@@ -109,14 +109,15 @@ export class OptionsListComponent implements OnInit {
             // parent_id for link
             let parent_id = -1;
             // find element with certain language
-            const description = descriptions.find(el => {
+            const description = descriptions.find((el) => {
               // set parent_id
               if (parent_id === -1 && el) {
                 parent_id = el.parent_id;
               }
               return el.language === this.storageService.getLanguage();
             });
-            const name = description && description.name ? description.name : '';
+            const name =
+              description && description.name ? description.name : '';
             return name;
           },
         },
@@ -124,22 +125,25 @@ export class OptionsListComponent implements OnInit {
           title: 'Type',
           type: 'string',
           filter: false,
-          valuePrepareFunction: (type) => this.translate.instant('COMMON.' + type),
+          valuePrepareFunction: (type) =>
+            this.translate.instant('COMMON.' + type),
         },
       },
     };
   }
 
   deleteRecord(event) {
-    this.dialogService.open(ShowcaseDialogComponent, {})
-      .onClose.subscribe(res => {
+    this.dialogService
+      .open(ShowcaseDialogComponent, {})
+      .onClose.subscribe((res) => {
         if (res) {
           // event.confirm.resolve();
-          this.optionService.deleteOption(event.data.id)
-            .subscribe(result => {
-              this.toastr.success(this.translate.instant('OPTION.OPTION_REMOVED'));
-              this.getList();
-            });
+          this.optionService.deleteOption(event.data.id).subscribe((result) => {
+            this.toastr.success(
+              this.translate.instant('OPTION.OPTION_REMOVED')
+            );
+            this.getList();
+          });
         } else {
           // event.confirm.reject();
         }

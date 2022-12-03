@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { VariationService } from '../services/variation.service';
 // import { OptionService } from '../services/option.service';
-import { LocalDataSource } from 'ng2-smart-table';
-import { TranslateService } from '@ngx-translate/core';
-import { ShowcaseDialogComponent } from '../../../shared/components/showcase-dialog/showcase-dialog.component';
 import { NbDialogService } from '@nebular/theme';
+import { TranslateService } from '@ngx-translate/core';
+import { LocalDataSource } from 'angular2-smart-table';
 import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'ngx-variations-list',
@@ -22,10 +21,8 @@ export class VariationsListComponent implements OnInit {
     private translate: TranslateService,
     private router: Router,
     private dialogService: NbDialogService,
-    private toastr: ToastrService,
-
-  ) {
-  }
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
     // this.setSettings();
@@ -33,7 +30,6 @@ export class VariationsListComponent implements OnInit {
   }
 
   getList() {
-
     this.loadingList = true;
     this.variationService.getListOfVariations().subscribe((res) => {
       this.source.load(res.items);
@@ -75,7 +71,6 @@ export class VariationsListComponent implements OnInit {
           title: this.translate.instant('COMMON.ID'),
           type: 'number',
           filter: false,
-
         },
         code: {
           title: this.translate.instant('COMMON.CODE'),
@@ -94,7 +89,7 @@ export class VariationsListComponent implements OnInit {
           filter: false,
           valuePrepareFunction: (data) => {
             if (data != null) {
-              const value = data.map(a => a.name).join(', ');
+              const value = data.map((a) => a.name).join(', ');
               return value;
             }
           },
@@ -131,7 +126,6 @@ export class VariationsListComponent implements OnInit {
     //     }
     //   });
   }
-
 
   onClickAction(event) {
     switch (event.action) {

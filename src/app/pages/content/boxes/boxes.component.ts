@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { LocalDataSource } from 'ng2-smart-table';
-import { CrudService } from '../../shared/services/crud.service';
 import { Router } from '@angular/router';
-import { MalihuScrollbarService } from 'ngx-malihu-scrollbar';
-import { StoreService } from '../../store-management/services/store.service';
-import { StorageService } from '../../shared/services/storage.service';
-import { TranslateService } from '@ngx-translate/core';
-import { ToastrService } from 'ngx-toastr';
 import { NbDialogService } from '@nebular/theme';
+import { TranslateService } from '@ngx-translate/core';
+import { LocalDataSource } from 'angular2-smart-table';
+import { MalihuScrollbarService } from 'ngx-malihu-scrollbar';
+import { ToastrService } from 'ngx-toastr';
 import { ShowcaseDialogComponent } from '../../shared/components/showcase-dialog/showcase-dialog.component';
+import { CrudService } from '../../shared/services/crud.service';
+import { StorageService } from '../../shared/services/storage.service';
+import { StoreService } from '../../store-management/services/store.service';
 @Component({
   selector: 'boxes-table',
   templateUrl: './boxes.component.html',
@@ -34,7 +34,7 @@ export class BoxesComponent {
     private storageService: StorageService,
     private translate: TranslateService,
     private toastr: ToastrService,
-    private dialogService: NbDialogService,
+    private dialogService: NbDialogService
   ) {
     this.getStoreList();
     this.translate.onLangChange.subscribe((lang) => {
@@ -55,8 +55,9 @@ export class BoxesComponent {
   }
 
   getStoreList() {
-    this.storeService.getListOfMerchantStoreNames({ store: '' })
-      .subscribe(res => {
+    this.storeService
+      .getListOfMerchantStoreNames({ store: '' })
+      .subscribe((res) => {
         res.forEach((store) => {
           this.stores.push({ value: store.code, label: store.code });
         });
@@ -65,12 +66,13 @@ export class BoxesComponent {
 
   getBox() {
     this.params.page = this.currentPage - 1;
-    this.crudService.get('/v1/private/content/boxes/', this.params)
-      .subscribe(data => {
+    this.crudService.get('/v1/private/content/boxes/', this.params).subscribe(
+      (data) => {
         this.source = data.items;
         this.totalCount = data.recordsTotal * data.totalPages;
-      }, error => {
-      });
+      },
+      (error) => {}
+    );
     this.setSettings();
   }
   setSettings() {
@@ -111,14 +113,15 @@ export class BoxesComponent {
             if (this.params.lang == '_all') {
               return row.descriptions[0].name;
             } else {
-              const value = row.descriptions.find((a) => a.language == this.params.lang);
+              const value = row.descriptions.find(
+                (a) => a.language == this.params.lang
+              );
               return value.name;
             }
           },
         },
       },
     };
-
   }
   addBoxes() {
     this.router.navigate(['/pages/content/boxes/add']);
@@ -165,31 +168,41 @@ export class BoxesComponent {
     this.router.navigate(['/pages/content/boxes/add/' + event.data.code]);
   }
   onDelete(event) {
-
-    this.dialogService.open(ShowcaseDialogComponent, {
-      context: 'Do you really want to remove this entity?',
-      // context: {
-      //   title: 'Are you sure!',
-      //   body: 'Do you really want to remove this entity?'
-      // },
-    }).onClose.subscribe(res => {
-      if (res) {
-        this.loadingList = true;
-        this.crudService.delete('/v1/private/content/' + event.data.id + '?id=' + event.data.id)
-          .subscribe(data => {
-            this.loadingList = false;
-            this.toastr.success('Content box deleted successfully');
-            this.getBox();
-          }, error => {
-            this.loadingList = false;
-          });
-      } else {
-        this.loadingList = false;
-      }
-    });
-
+    this.dialogService
+      .open(ShowcaseDialogComponent, {
+        context: 'Do you really want to remove this entity?',
+        // context: {
+        //   title: 'Are you sure!',
+        //   body: 'Do you really want to remove this entity?'
+        // },
+      })
+      .onClose.subscribe((res) => {
+        if (res) {
+          this.loadingList = true;
+          this.crudService
+            .delete(
+              '/v1/private/content/' + event.data.id + '?id=' + event.data.id
+            )
+            .subscribe(
+              (data) => {
+                this.loadingList = false;
+                this.toastr.success('Content box deleted successfully');
+                this.getBox();
+              },
+              (error) => {
+                this.loadingList = false;
+              }
+            );
+        } else {
+          this.loadingList = false;
+        }
+      });
   }
   ngAfterViewInit() {
-    this.mScrollbarService.initScrollbar('.custom_scroll', { axis: 'y', theme: 'minimal-dark', scrollButtons: { enable: true } });
+    this.mScrollbarService.initScrollbar('.custom_scroll', {
+      axis: 'y',
+      theme: 'minimal-dark',
+      scrollButtons: { enable: true },
+    });
   }
 }
