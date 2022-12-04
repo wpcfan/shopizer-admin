@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { OptionService } from '../services/option.service';
 import { OptionValuesService } from '../services/option-values.service';
 import { VariationService } from '../services/variation.service';
@@ -32,11 +32,11 @@ export class AddVariationsComponent implements OnInit {
     optionValue: '',
   };
   loading = false;
-  form: FormGroup;
+  form: UntypedFormGroup;
   productOption: Array<any> = [];
   productOptionValue: Array<any> = [];
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private router: Router,
     private optionService: OptionService,
     private optionValuesService: OptionValuesService,

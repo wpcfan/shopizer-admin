@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { StoreService } from '../../../../store-management/services/store.service';
@@ -19,7 +19,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export class InventoryFormComponent implements OnInit {
   @Input() inventory;
   @Input() _title;
-  form: FormGroup;
+  form: UntypedFormGroup;
   stores = [];
   loader = false;
   languages = [];
@@ -27,7 +27,7 @@ export class InventoryFormComponent implements OnInit {
   prices = [];
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private toastr: ToastrService,
     // private router: Router,
     private translate: TranslateService,

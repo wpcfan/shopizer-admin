@@ -167,7 +167,6 @@
       }
     }
   },
-  "defaultProject": "shopizer-admin",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "ngx",

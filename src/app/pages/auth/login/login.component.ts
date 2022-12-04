@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   ValidationErrors,
   Validators,
 } from '@angular/forms';
@@ -19,7 +19,7 @@ import { TokenService } from '../services/token.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   errorMessage = '';
   showPass = 0;
   isSubmitted = false;
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
   };
   isRemember: Boolean = false;
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private authService: AuthService,
     private router: Router,
     private tokenService: TokenService,

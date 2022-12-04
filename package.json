@@ -19,12 +19,12 @@
     "postinstall": "ngcc --properties es2015 es5 browser module main --first-only --create-ivy-entry-points"
   },
   "dependencies": {
-    "@angular-devkit/core": "^13.3.10",
+    "@angular-devkit/core": "^14.2.10",
     "@angular/animations": "^14.2.12",
-    "@angular/cdk": "^13.3.9",
+    "@angular/cdk": "^14.2.7",
     "@angular/common": "^14.2.12",
     "@angular/compiler": "^14.2.12",
-    "@angular/core": "^13.3.12",
+    "@angular/core": "^14.2.12",
     "@angular/forms": "^14.2.12",
     "@angular/localize": "^14.2.12",
     "@angular/platform-browser": "^14.2.12",
@@ -88,13 +88,13 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "13.3.10",
+    "@angular-devkit/build-angular": "14.2.10",
     "@angular-eslint/builder": "^12.0.0",
     "@angular-eslint/eslint-plugin": "^12.0.0",
     "@angular-eslint/eslint-plugin-template": "^12.0.0",
     "@angular-eslint/schematics": "^12.0.0",
     "@angular-eslint/template-parser": "^12.0.0",
-    "@angular/cli": "^13.3.10",
+    "@angular/cli": "^14.2.10",
     "@angular/compiler-cli": "^14.2.12",
     "@angular/language-service": "14.2.12",
     "@compodoc/compodoc": "^1.1.15",

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
@@ -19,7 +19,7 @@ declare let $: any;
 export class AddBoxComponent implements OnInit {
   loader = false;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   content: any;
 
   languages = [];
@@ -80,7 +80,7 @@ export class AddBoxComponent implements OnInit {
   params = this.param();
   public scrollbarOptions = { axis: 'y', theme: 'minimal-dark' };
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private crudService: CrudService,
     public router: Router,
     private toastr: ToastrService,
@@ -145,7 +145,7 @@ export class AddBoxComponent implements OnInit {
   }
 
   private addFormArray() {
-    const control = <FormArray>this.form.controls.descriptions;
+    const control = <UntypedFormArray>this.form.controls.descriptions;
     this.languages.forEach((lang) => {
       control.push(
         this.fb.group({
@@ -176,7 +176,7 @@ export class AddBoxComponent implements OnInit {
       if (this.content != null && this.content.descriptions) {
         this.content.descriptions.forEach((description) => {
           if (desc.language === description.language) {
-            (<FormArray>this.form.get('descriptions')).at(index).patchValue({
+            (<UntypedFormArray>this.form.get('descriptions')).at(index).patchValue({
               id: description.id,
               language: description.language,
               description: description.description,
@@ -315,8 +315,8 @@ export class AddBoxComponent implements OnInit {
     return this.form.get('code');
   }
 
-  get descriptions(): FormArray {
-    return <FormArray>this.form.get('descriptions');
+  get descriptions(): UntypedFormArray {
+    return <UntypedFormArray>this.form.get('descriptions');
   }
 
   get selectedLanguage() {
