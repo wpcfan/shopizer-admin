@@ -5,16 +5,13 @@ import { CrudService } from '../../shared/services/crud.service';
   providedIn: 'root',
 })
 export class SharedService {
-
-  constructor(
-    private crudService: CrudService,
-  ) { }
+  constructor(private crudService: CrudService) {}
 
   private subject = new Subject<any>();
   private subject1 = new Subject<any>();
 
   sendClickEvent() {
-    this.subject.next();
+    this.subject.next(null);
   }
   selectStore(store) {
     this.subject1.next(store);
@@ -29,16 +26,26 @@ export class SharedService {
     return this.crudService.get('/v1/country');
   }
   getExpedition(storeCode): Observable<any> {
-    return this.crudService.get('/v1/private/shipping/expedition?store=' + storeCode);
+    return this.crudService.get(
+      '/v1/private/shipping/expedition?store=' + storeCode
+    );
   }
   saveExpedition(storeCode, param): Observable<any> {
-    return this.crudService.post('/v1/private/shipping/expedition?store=' + storeCode, param);
+    return this.crudService.post(
+      '/v1/private/shipping/expedition?store=' + storeCode,
+      param
+    );
   }
   getShippingOrigin(selectedStore): Observable<any> {
-    return this.crudService.get('/v1/private/shipping/origin?store=' + selectedStore);
+    return this.crudService.get(
+      '/v1/private/shipping/origin?store=' + selectedStore
+    );
   }
   saveOrigin(storeCode, param): Observable<any> {
-    return this.crudService.post('/v1/private/shipping/origin?store=' + storeCode, param);
+    return this.crudService.post(
+      '/v1/private/shipping/origin?store=' + storeCode,
+      param
+    );
   }
   getCountries(): Observable<any> {
     return this.crudService.get('/v1/country');
@@ -61,7 +68,6 @@ export class SharedService {
   deletePackaging(code): Observable<any> {
     return this.crudService.delete('/v1/private/shipping/package/' + code);
   }
-
 
   // ************ Shipping Rules API NEW Start ***************
   getRulesCriterias(): Observable<any> {
@@ -86,7 +92,9 @@ export class SharedService {
     return this.crudService.deleteShipping('/private/rules/' + code);
   }
   checkCode(value): Observable<any> {
-    return this.crudService.getShipping('/private/rules/' + value + '/unique?store=DEFAULT');
+    return this.crudService.getShipping(
+      '/private/rules/' + value + '/unique?store=DEFAULT'
+    );
   }
 
   // ************ Shipping Rules API NEW Start ***************
@@ -100,4 +108,3 @@ export class SharedService {
     return this.crudService.post('/v1/private/modules/shipping/', param);
   }
 }
-

@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { OptionService } from '../services/option.service';
-import { OptionValuesService } from '../services/option-values.service';
-import { VariationService } from '../services/variation.service';
-import { ToastrService } from 'ngx-toastr';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { validators } from '../../../shared/validation/validators';
+import { ToastrService } from 'ngx-toastr';
 import { StorageService } from '../../../shared/services/storage.service';
+import { validators } from '../../../shared/validation/validators';
+import { OptionValuesService } from '../services/option-values.service';
+import { OptionService } from '../services/option.service';
+import { VariationService } from '../services/variation.service';
 // import { TypesService } from '../../types/services/types.service';
-import { error } from '@angular/compiler/src/util';
 @Component({
   selector: 'ngx-variation-add',
   templateUrl: './add-variations.component.html',
@@ -22,8 +25,7 @@ export class AddVariationsComponent implements OnInit {
   // isValidCode = true;
   // isValidOption = true;
 
-  defaultParam = {
-  };
+  defaultParam = {};
 
   opt = {
     id: '',
@@ -44,7 +46,7 @@ export class AddVariationsComponent implements OnInit {
     private translate: TranslateService,
     private variationService: VariationService,
     private toastr: ToastrService,
-    private activatedRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute
   ) {
     this.getOption();
   }
@@ -93,12 +95,10 @@ export class AddVariationsComponent implements OnInit {
     //       this.loading = false;
     //     });
 
-
     // }
     // this.translate.onLangChange.subscribe((lang) => {
     //   this.getOption();
     // });
-
   }
 
   private adjustForm() {
@@ -113,49 +113,61 @@ export class AddVariationsComponent implements OnInit {
     }
   }
 
-
   private createForm() {
     this.form = this.fb.group({
-      code: [{ value: '', disabled: false }, [Validators.required, Validators.pattern(validators.alphanumeric)]],
+      code: [
+        { value: '', disabled: false },
+        [Validators.required, Validators.pattern(validators.alphanumeric)],
+      ],
       option: ['', [Validators.required]],
       optionValue: ['', [Validators.required]],
     });
   }
 
-
   getOption() {
     this.productOption = [];
     this.loading = true;
-    this.optionService.getListOfOptions({})
-      .subscribe((res) => {
+    this.optionService.getListOfOptions({}).subscribe(
+      (res) => {
         res.options.map((value) => {
-          const description = value.descriptions.find(el => el.language === this.storageService.getLanguage());
+          const description = value.descriptions.find(
+            (el) => el.language === this.storageService.getLanguage()
+          );
           const name = description && description.name ? description.name : '';
           this.productOption.push({ id: value.id, code: value.code, name });
         });
-      }, error => {
+      },
+      (error) => {
         //TODO error
         this.loading = false;
-      });
+      }
+    );
     this.getOptionValue();
     this.loading = false;
   }
   getOptionValue() {
     this.productOptionValue = [];
-    this.optionValuesService.getListOfOptionValues({})
-      .subscribe(res => {
+    this.optionValuesService.getListOfOptionValues({}).subscribe(
+      (res) => {
         // console.log(res);
         res.optionValues.map((value) => {
-          const description = value.descriptions.find(el => el.language === this.storageService.getLanguage());
+          const description = value.descriptions.find(
+            (el) => el.language === this.storageService.getLanguage()
+          );
           const name = description && description.name ? description.name : '';
-          this.productOptionValue.push({ id: value.id, code: value.code, name });
+          this.productOptionValue.push({
+            id: value.id,
+            code: value.code,
+            name,
+          });
         });
-      }, error => {
+      },
+      (error) => {
         //TODO error
         this.loading = false;
-      });
+      }
+    );
   }
-
 
   get code() {
     return this.form.get('code');
@@ -169,16 +181,13 @@ export class AddVariationsComponent implements OnInit {
     return this.form.get('optionValue');
   }
 
-
   checkCode(event) {
     // this.isValidCode = true;
-    this.variationService.checkCode(event.target.value)
-      .subscribe(res => {
-        //console.log(res)
-        this.isCodeExist = res.exists;
-      });
+    this.variationService.checkCode(event.target.value).subscribe((res) => {
+      //console.log(res)
+      this.isCodeExist = res.exists;
+    });
   }
-
 
   save() {
     console.log(this.form.value);
@@ -206,7 +215,6 @@ export class AddVariationsComponent implements OnInit {
     // }
 
     if (this.opt.id) {
-
       //   this.optionService.updateSetOption(this.option.id, optionObj)
       //     .subscribe((res) => {
       //       this.toastr.success(this.translate.instant('OPTION.SET_OPTION_UPDATED'));
@@ -214,16 +222,19 @@ export class AddVariationsComponent implements OnInit {
       //     }, error => {
       //       this.loading = false;
       //     });
-
     } else {
-      this.variationService.addVariations(this.form.value)
-        .subscribe((res) => {
-          this.toastr.success(this.translate.instant('OPTION.SET_OPTION_CREATED'));
+      this.variationService.addVariations(this.form.value).subscribe(
+        (res) => {
+          this.toastr.success(
+            this.translate.instant('OPTION.SET_OPTION_CREATED')
+          );
           this.goToback();
           this.loading = false;
-        }, error => {
+        },
+        (error) => {
           this.loading = false;
-        });
+        }
+      );
     }
   }
   goToback() {
@@ -233,8 +244,6 @@ export class AddVariationsComponent implements OnInit {
   //   //console.log(e)
   //   this.option.optionValues = e;
   // }
-
-
 
   // public findInvalidControls() {
   //   const invalid = [];

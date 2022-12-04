@@ -1,8 +1,7 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { SharedService } from '../services/shared.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { error } from '@angular/compiler/src/util';
+import { SharedService } from '../services/shared.service';
 @Component({
   selector: 'ngx-shipping-methods',
   templateUrl: './methods.component.html',
@@ -18,7 +17,7 @@ export class ShippingMethodsComponent implements OnInit {
   constructor(
     private sharedService: SharedService,
     private router: Router,
-    private translate: TranslateService,
+    private translate: TranslateService
   ) {
     this.getMethodsList();
   }
@@ -30,18 +29,18 @@ export class ShippingMethodsComponent implements OnInit {
 
   getMethodsList() {
     this.loadingList = true;
-    this.sharedService.getShippingModules()
-      .subscribe(data => {
+    this.sharedService.getShippingModules().subscribe(
+      (data) => {
         console.log(data);
         this.loadingList = false;
         this.shippingData = data;
-      }, error => {
+      },
+      (error) => {
         this.loadingList = false;
-      });
+      }
+    );
   }
   onClickConfigure(value) {
     this.router.navigate(['pages/shipping/methods-configure/' + value]);
   }
-
-
 }
