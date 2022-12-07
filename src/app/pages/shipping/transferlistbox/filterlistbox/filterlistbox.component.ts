@@ -1,15 +1,15 @@
 import {
-  Component,
-  OnInit,
-  Input,
-  EventEmitter,
-  Output,
-  ElementRef,
-  ViewChild,
-  ViewChildren,
   AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
   QueryList,
   Renderer2,
+  ViewChild,
+  ViewChildren,
 } from '@angular/core';
 
 @Component({
@@ -66,13 +66,13 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
         this.renderer.setAttribute(
           eleRef.nativeElement,
           'data-activedesendent',
-          'true',
+          'true'
         );
       } else {
         this.renderer.setAttribute(
           eleRef.nativeElement,
           'data-activedesendent',
-          'false',
+          'false'
         );
       }
     });
@@ -119,17 +119,17 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
   setActiveAndScrollIntoView(
     eleRef: ElementRef,
     index: number,
-    optionsarray: ElementRef[],
+    optionsarray: ElementRef[]
   ) {
     this.renderer.setAttribute(
       eleRef.nativeElement,
       'data-activedesendent',
-      'false',
+      'false'
     );
     this.renderer.setAttribute(
       optionsarray[index].nativeElement,
       'data-activedesendent',
-      'true',
+      'true'
     );
     this.activedescendentItem = optionsarray[index].nativeElement.id;
     // optionsarray[index].nativeElement.scrollIntoView();
@@ -152,7 +152,7 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
             this.setActiveAndScrollIntoView(eleRef, 0, optionsarray);
             return true;
           }
-        },
+        }
       );
     } else {
       this.options.some(
@@ -161,7 +161,7 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
             this.setActiveAndScrollIntoView(eleRef, 0, optionsarray);
             return true;
           }
-        },
+        }
       );
     }
   }
@@ -191,12 +191,12 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
             this.renderer.setAttribute(
               eleRef.nativeElement,
               'data-activedesendent',
-              'false',
+              'false'
             );
             this.renderer.setAttribute(
               optionsarray[optionsarray.length - 1].nativeElement,
               'data-activedesendent',
-              'true',
+              'true'
             );
             this.activedescendentItem =
               optionsarray[optionsarray.length - 1].nativeElement.id;
@@ -204,7 +204,7 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
             this.scrollIntoViewSmoothly(optionsarray[optionsarray.length - 1]);
             return true;
           }
-        },
+        }
       );
     } else {
       this.options.some(
@@ -213,7 +213,7 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
             this.renderer.setAttribute(
               optionsarray[optionsarray.length - 1].nativeElement,
               'data-activedesendent',
-              'true',
+              'true'
             );
             this.activedescendentItem =
               optionsarray[optionsarray.length - 1].nativeElement.id;
@@ -221,7 +221,7 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
             this.scrollIntoViewSmoothly(optionsarray[optionsarray.length - 1]);
             return true;
           }
-        },
+        }
       );
     }
   }
@@ -244,12 +244,12 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
             this.renderer.setAttribute(
               eleRef.nativeElement,
               'data-activedesendent',
-              'false',
+              'false'
             );
             this.renderer.setAttribute(
               optionsarray[index + 1].nativeElement,
               'data-activedesendent',
-              'true',
+              'true'
             );
             this.activedescendentItem =
               optionsarray[index + 1].nativeElement.id;
@@ -260,7 +260,7 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
             }
             return true;
           }
-        },
+        }
       );
     } else {
       this.options.some(
@@ -269,7 +269,7 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
             this.renderer.setAttribute(
               optionsarray[index].nativeElement,
               'data-activedesendent',
-              'true',
+              'true'
             );
             this.activedescendentItem = optionsarray[index].nativeElement.id;
             //optionsarray[index].nativeElement.scrollIntoView();
@@ -279,7 +279,7 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
             }
             return true;
           }
-        },
+        }
       );
     }
   }
@@ -305,12 +305,12 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
             this.renderer.setAttribute(
               eleRef.nativeElement,
               'data-activedesendent',
-              'false',
+              'false'
             );
             this.renderer.setAttribute(
               optionsarray[index - 1].nativeElement,
               'data-activedesendent',
-              'true',
+              'true'
             );
             this.activedescendentItem =
               optionsarray[index - 1].nativeElement.id;
@@ -320,7 +320,7 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
             }
             return true;
           }
-        },
+        }
       );
     } else {
       this.options.some(
@@ -328,7 +328,7 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
           this.renderer.setAttribute(
             optionsarray[optionsarray.length - 1].nativeElement,
             'data-activedesendent',
-            'true',
+            'true'
           );
           this.activedescendentItem =
             optionsarray[optionsarray.length - 1].nativeElement.id;
@@ -338,7 +338,7 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
             this.updateSelectedOption(optionsarray[optionsarray.length - 1]);
           }
           return true;
-        },
+        }
       );
     }
   }
@@ -358,7 +358,7 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
             this.updateSelectedOption(eleRef);
             return true;
           }
-        },
+        }
       );
     }
   }
@@ -407,5 +407,10 @@ export class FilterlistboxComponent implements OnInit, AfterViewInit {
     this.itemsMap.forEach((item: any, key: string) => {
       item.selected = selected;
     });
+  }
+
+  onDelete(ev: Event) {
+    ev.stopPropagation();
+    this.onDeleteClicked.emit();
   }
 }

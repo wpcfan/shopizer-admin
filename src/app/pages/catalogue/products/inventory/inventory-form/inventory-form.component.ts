@@ -1,15 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { StoreService } from '../../../../store-management/services/store.service';
-import { ConfigService } from '../../../../shared/services/config.service';
-import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
-import { InventoryService } from '../../services/inventory.service';
 import * as moment from 'moment';
+import { ToastrService } from 'ngx-toastr';
+import { ConfigService } from '../../../../shared/services/config.service';
 import { validators } from '../../../../shared/validation/validators';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreService } from '../../../../store-management/services/store.service';
+import { InventoryService } from '../../services/inventory.service';
 
 @Component({
   selector: 'ngx-inventory-form',
@@ -34,22 +37,21 @@ export class InventoryFormComponent implements OnInit {
     private storeService: StoreService,
     private configService: ConfigService,
     private activatedRoute: ActivatedRoute,
-    private inventoryService: InventoryService,
-  ) {
-  }
+    private inventoryService: InventoryService
+  ) {}
 
   ngOnInit() {
     this.productId = this.activatedRoute.snapshot.paramMap.get('productId');
     this.createForm();
-    this.storeService.getListOfStores({})
-      .subscribe(res => {
-        res.data.forEach((store) => {
-          this.stores.push({ value: store.code, label: store.code });
-        });
+    this.storeService.getListOfStores({}).subscribe((res) => {
+      res.data.forEach((store) => {
+        this.stores.push({ value: store.code, label: store.code });
       });
+    });
     this.loader = true;
-    this.configService.getListOfSupportedLanguages(localStorage.getItem('merchant'))
-      .subscribe(res => {
+    this.configService
+      .getListOfSupportedLanguages(localStorage.getItem('merchant'))
+      .subscribe((res) => {
         this.languages = [...res];
         this.createForm();
         if (this.inventory.id) {
@@ -62,7 +64,10 @@ export class InventoryFormComponent implements OnInit {
   private createForm() {
     this.form = this.fb.group({
       available: [false],
-      sku: ['', [Validators.required, Validators.pattern(validators.alphanumeric)]],
+      sku: [
+        '',
+        [Validators.required, Validators.pattern(validators.alphanumeric)],
+      ],
       dateAvailable: [new Date()],
       store: ['DEFAULT', [Validators.required]],
       variant: ['', [Validators.required]],
@@ -98,24 +103,35 @@ export class InventoryFormComponent implements OnInit {
     // });
   }
 
-
   save() {
     const inventoryObj = this.form.value;
-    inventoryObj.dateAvailable =
-      inventoryObj.dateAvailable ? moment(inventoryObj.dateAvailable).format('yyyy-MM-DD') : '';
+    inventoryObj.dateAvailable = inventoryObj.dateAvailable
+      ? moment(inventoryObj.dateAvailable).format('yyyy-MM-DD')
+      : '';
     inventoryObj.prices = [...this.prices];
     inventoryObj.productId = this.productId;
     if (this.inventory.id) {
       inventoryObj.id = this.inventory.id;
-      this.inventoryService.updateInventory(this.productId, this.inventory.id, inventoryObj).subscribe((res) => {
-        this.toastr.success(this.translate.instant('INVENTORY.INVENTORY_UPDATED'));
-      });
+      this.inventoryService
+        .updateInventory(this.productId, this.inventory.id, inventoryObj)
+        .subscribe((res) => {
+          this.toastr.success(
+            this.translate.instant('INVENTORY.INVENTORY_UPDATED')
+          );
+        });
     } else {
       this.inventoryService.createInventory(inventoryObj).subscribe((res) => {
-        this.toastr.success(this.translate.instant('INVENTORY.INVENTORY_CREATED'));
+        this.toastr.success(
+          this.translate.instant('INVENTORY.INVENTORY_CREATED')
+        );
         this.inventory = res;
       });
     }
   }
 
+  onImageChanged(event) {}
+
+  checkSku(ev: Event) {}
+
+  transformTotal() {}
 }

@@ -6,18 +6,15 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./upload.component.css'],
 })
 export class UploadComponent {
-
   files: File[] = [];
-  validDrag: Boolean;
+  validDrag = false;
   @Input() multi: string;
 
-  @Input() onUpload = (files: File[]) => { };
+  @Input() onUpload = (files: File[]) => {};
 
   onFilesChange() {
-
     this.onUpload([...this.files]);
 
     this.files.length = 0;
   }
-
 }

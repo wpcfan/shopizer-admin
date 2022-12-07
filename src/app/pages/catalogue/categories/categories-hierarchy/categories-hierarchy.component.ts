@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CategoryService } from '../services/category.service';
-import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
+import { TreeOptions } from 'angular-tree-component/dist/models/tree-options.model';
+import { ToastrService } from 'ngx-toastr';
 import { StorageService } from '../../../shared/services/storage.service';
+import { CategoryService } from '../services/category.service';
 
 @Component({
   selector: 'ngx-categories-hierarchy',
@@ -12,9 +13,9 @@ import { StorageService } from '../../../shared/services/storage.service';
 export class CategoriesHierarchyComponent implements OnInit {
   @ViewChild('tree', { static: false }) tree;
   nodes = [];
-  options = {
+  options: TreeOptions = new TreeOptions({
     allowDrag: true,
-  };
+  });
   loader = false;
   loading = false;
   params = this.loadParams();
@@ -23,9 +24,8 @@ export class CategoriesHierarchyComponent implements OnInit {
     private categoryService: CategoryService,
     private toastr: ToastrService,
     private translate: TranslateService,
-    private storageService: StorageService,
-  ) {
-  }
+    private storageService: StorageService
+  ) {}
 
   loadParams() {
     return {
@@ -42,14 +42,13 @@ export class CategoriesHierarchyComponent implements OnInit {
   getList() {
     // TODO need possibility to get all items at once
     this.loader = true;
-    this.categoryService.getListOfCategories(this.params)
-      .subscribe(res => {
-        res.categories.forEach((el) => {
-          this.transformList(el);
-        });
-        this.nodes = res.categories;
-        this.loader = false;
+    this.categoryService.getListOfCategories(this.params).subscribe((res) => {
+      res.categories.forEach((el) => {
+        this.transformList(el);
       });
+      this.nodes = res.categories;
+      this.loader = false;
+    });
   }
 
   transformList(node) {
@@ -73,10 +72,12 @@ export class CategoriesHierarchyComponent implements OnInit {
       parentId = -1;
     }
 
-    this.categoryService.updateHierarchy(event.node.id, parentId)
-      .subscribe(res => {
-        this.toastr.success(this.translate.instant('CATEGORY.HIERARCHY_UPDATED'));
+    this.categoryService
+      .updateHierarchy(event.node.id, parentId)
+      .subscribe((res) => {
+        this.toastr.success(
+          this.translate.instant('CATEGORY.HIERARCHY_UPDATED')
+        );
       });
   }
-
 }

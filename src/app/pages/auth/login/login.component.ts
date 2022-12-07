@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
     email: '',
     password: '',
   };
-  isRemember: Boolean = false;
+  isRemember = false;
   constructor(
     private fb: UntypedFormBuilder,
     private authService: AuthService,
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
     private tokenService: TokenService,
     private userService: UserService,
     private toastr: ToastrService,
-    private translate: TranslateService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -91,7 +91,7 @@ export class LoginComponent implements OnInit {
             this.userService.checkForAccess(user.groups);
             localStorage.setItem(
               'roles',
-              JSON.stringify(this.userService.roles),
+              JSON.stringify(this.userService.roles)
             );
             localStorage.setItem('merchant', user.merchant);
             delay(1000);
@@ -106,19 +106,19 @@ export class LoginComponent implements OnInit {
           (err) => {
             this.toastr.error(err.error.message);
             this.loading = false;
-          },
+          }
         );
       },
       (err) => {
         if (err.status === 0) {
           this.errorMessage = this.translate.instant(
-            'COMMON.INTERNAL_SERVER_ERROR',
+            'COMMON.INTERNAL_SERVER_ERROR'
           );
         } else {
           this.errorMessage = this.translate.instant('LOGIN.INVALID_DATA');
         }
         this.loading = false;
-      },
+      }
     );
   }
   onCheckRemember(e) {
@@ -138,7 +138,7 @@ export class LoginComponent implements OnInit {
         Object.keys(controlErrors).forEach((keyError) => {
           console.log(
             'Key control: ' + key + ', keyError: ' + keyError + ', err value: ',
-            controlErrors[keyError],
+            controlErrors[keyError]
           );
         });
       }

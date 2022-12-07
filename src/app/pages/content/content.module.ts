@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { NbDialogModule } from '@nebular/theme';
+import { ngfModule } from 'angular-file';
 import { FileManagerModule } from 'ng6-file-man';
 import { NgxAngularQueryBuilderModule } from 'ngx-angular-query-builder';
 import { NgxDropzoneModule } from 'ngx-dropzone';
@@ -25,6 +26,7 @@ import {
     LightboxModule,
     MalihuScrollbarModule.forRoot(),
     CustomModule,
+    ngfModule,
   ],
 })
 export class ContentModule {}

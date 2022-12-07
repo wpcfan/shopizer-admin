@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
@@ -176,22 +181,24 @@ export class AddBoxComponent implements OnInit {
       if (this.content != null && this.content.descriptions) {
         this.content.descriptions.forEach((description) => {
           if (desc.language === description.language) {
-            (<UntypedFormArray>this.form.get('descriptions')).at(index).patchValue({
-              id: description.id,
-              language: description.language,
-              description: description.description,
-              name: description.name,
-              title: description.title,
-            });
+            (<UntypedFormArray>this.form.get('descriptions'))
+              .at(index)
+              .patchValue({
+                id: description.id,
+                language: description.language,
+                description: description.description,
+                name: description.name,
+                title: description.title,
+              });
           }
         });
       }
     });
   }
 
-  private checkCode(event) {
+  checkCode(event: Event) {
     //check if box code already exists
-    const code = event.target.value.trim();
+    const code = (event.target as HTMLInputElement).value.trim();
     this.crudService
       .get('/v1/private/content/box/' + code + '/exists', this.param())
       .subscribe((res) => {
@@ -199,7 +206,7 @@ export class AddBoxComponent implements OnInit {
       });
   }
 
-  private save() {
+  save() {
     this.form.markAllAsTouched();
     if (this.findInvalidControls().length > 0) {
       return;
@@ -353,4 +360,6 @@ export class AddBoxComponent implements OnInit {
     });
     return button.render();
   }
+
+  changeFn(event: Event) {}
 }
